@@ -15,9 +15,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
+  userRecipes UserRecipes[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -75,4 +74,26 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
  
   @@id([userId, credentialID])
+}
+
+model Recipe {
+  id        String     @id @default(cuid())
+  title     String
+  image     String
+  instructions String?
+  userRecipes UserRecipes[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserRecipes {
+  userId String 
+  recipeId String
+  weekNumber Int
+  year Int
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@id([userId, recipeId, weekNumber, year])
 }

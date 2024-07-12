@@ -7,6 +7,10 @@ interface Recipe {
   id: number;
   title: string;
   image: string;
+  healthScore: number;
+  servings: string;
+  readyInMinutes: number;
+  pricePerServing: number;
 }
 
 export default function Recettes() {
@@ -108,6 +112,20 @@ export default function Recettes() {
               >
                 Remplacer
               </button>
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-row gap-2">
+                  <p className="text-sm">Health Score : {recipe.healthScore}</p>
+                  <p className="text-sm">
+                    ready in {recipe.readyInMinutes} minutes
+                  </p>
+                </div>
+                <div className="flex flex-row gap-2">
+                  <p className="text-sm">Servings : {recipe.servings}</p>
+                  <p className="text-sm">
+                    Price/serving : ${recipe.pricePerServing / 100}
+                  </p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
