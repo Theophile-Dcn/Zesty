@@ -1,5 +1,6 @@
 'use client';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 
 interface Recipe {
@@ -32,8 +33,34 @@ export default function Recettes() {
     }
   };
 
+  const updateRecipes = async (index: number) => {
+    const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+    console.log('API Key:', apiKey); // Vérifiez si la clé API est bien définie
+    try {
+      const res = await fetch(
+        `https://api.spoonacular.com/recipes/random?number=1&tags=main%20course`,
+        {
+          headers: new Headers({
+            'x-api-key': apiKey || ''
+          })
+        }
+      );
+      const data = await res.json();
+      const newRecipes = data.recipes[0];
+      setRecipes((prevRecipes) => {
+        const updateRecipes = [...prevRecipes];
+        updateRecipes[index] = newRecipes;
+        return updateRecipes;
+      });
+
+      console.log('Fetched recipes:', data.recipes); // Ajoutez un console.log pour vérifier les données reçues
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+    }
+  };
+
   return (
-    <section className="flex flex-col items-center justify-center gap-4 p-4 text-center">
+    <section className="flex flex-col items-center justify-center gap-4 px-4 py-8 text-center">
       <h1>Bonjour Théo !</h1>
       <p>Combien de recettes voulez-vous préparer ?</p>
       <div className="flex flex-col border-2 border-red-400 rounded-md ">
@@ -44,7 +71,7 @@ export default function Recettes() {
           >
             -
           </button>
-          <span className="text-black">{count}</span>
+          <span className="">{count}</span>
           <button
             className="text-red-400 w-full"
             onClick={() => setCount(count + 1)}
@@ -61,11 +88,11 @@ export default function Recettes() {
       </div>
 
       {recipes.length > 0 && (
-        <div className="mt-4 gap-4 flex flex-row border-2 border-red-900">
-          {recipes.map((recipe) => (
+        <div className="mt-4 gap-4 flex flex-row flex-wrap  p-4 w-full">
+          {recipes.map((recipe, index) => (
             <div
               key={recipe.id}
-              className=" p-4 border-2 border-green-400 rounded-md"
+              className=" p-4 border-2 border-green-400 rounded-md w-full flex flex-col items-center justify-center gap-4"
             >
               <h2 className="text-sm font-bold">{recipe.title}</h2>
               <Image
@@ -73,12 +100,19 @@ export default function Recettes() {
                 alt={recipe.title}
                 width={300} // Spécifiez la largeur
                 height={300} // Spécifiez la hauteur
-                className="h-auto rounded-md"
+                className="rounded-md"
               />
+              <button
+                className="border border-green-400 rounded-lg p-2 text-sm font-semibold"
+                onClick={() => updateRecipes(index)}
+              >
+                Remplacer
+              </button>
             </div>
           ))}
         </div>
       )}
+      <Link href="/cuisine">Générer une liste</Link>
     </section>
   );
 }
