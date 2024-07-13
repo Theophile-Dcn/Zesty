@@ -1,5 +1,5 @@
 import { auth } from '@/src/lib/auth';
-import { LoginButton, LogoutButton } from './AuthButtons';
+import { LoginButton, LogoutButton } from '../src/component/Button/AuthButtons';
 
 export default async function Home() {
   const session = await auth();
