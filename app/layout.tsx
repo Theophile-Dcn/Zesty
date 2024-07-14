@@ -1,3 +1,4 @@
+import { RecipeProvider } from '@/context/RecipeContext';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import Header from '../src/component/Header/Header';
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body className={`${inter.className} h-full`}>
-        {/* Ensure you import your actual header component */}
-        <Header />
-        {children}
+        <RecipeProvider>
+          {/* Ensure you import your actual header component */}
+          <Header />
+          {children}
+        </RecipeProvider>
       </body>
     </html>
   );

@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@/component/Button';
-import RecipeCard from '@/component/RecipeCard';
 import useRecipes from '@/hooks/useRecipes';
+import Button from '@/src/component/Button';
+import RecipeCard from '@/src/component/RecipeCard';
 import Link from 'next/link';
 
 export default function Recettes() {
