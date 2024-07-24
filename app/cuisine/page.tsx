@@ -1,34 +1,42 @@
+// /app/cuisine/page.tsx
 'use client';
-import RecipeCard from '@/components/RecipeCard';
-import { useRecipeContext } from '@/context/RecipeContext';
-import { useEffect } from 'react';
 
-export default function Cuisine() {
-  const { recipes, setRecipes } = useRecipeContext();
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+interface Recipe {
+  id: number;
+  name: string;
+  ingredients: string;
+}
+
+const CuisinePage = () => {
+  const searchParams = useSearchParams();
+  const [recipe, setRecipe] = useState<Recipe | null>(null);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      const response = await fetch('/api/recipes');
-      const data = await response.json();
-      setRecipes(data);
-    };
-    fetchRecipes();
-  }, [setRecipes]);
+    const recipeParam = searchParams.get('recipe');
+    if (recipeParam) {
+      try {
+        const parsedRecipe = JSON.parse(decodeURIComponent(recipeParam));
+        setRecipe(parsedRecipe);
+      } catch (error) {
+        console.error('Error parsing recipe:', error);
+      }
+    }
+  }, [searchParams]);
+
+  if (!recipe) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <section className="flex flex-col items-center justify-center gap-4 px-4 py-8 text-center">
-      <h1>Liste des recettes</h1>
-      <div className="mt-4 gap-4 flex flex-row flex-wrap p-4 w-full">
-        {recipes.map((recipe) => (
-          <RecipeCard
-            key={recipe.id}
-            recipe={recipe}
-            onUpdate={function (): void {
-              throw new Error('Function not implemented.');
-            }}
-          />
-        ))}
-      </div>
-    </section>
+    <div>
+      <h1>Cuisine</h1>
+      <h2>{recipe.name}</h2>
+      <p>{recipe.ingredients}</p>
+    </div>
   );
-}
+};
+
+export default CuisinePage;
