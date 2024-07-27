@@ -31,11 +31,11 @@ const RecettePage = () => {
   };
 
   return (
-    <div>
-      <h1>Recettes</h1>
-      <ul>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="p-8">Recettes</h1>
+      <ul className="flex gap-12">
         {recipes.map((recipe) => (
-          <li key={recipe.id}>
+          <li className="flex flex-col gap-2" key={recipe.id}>
             {recipe.name}
             <button onClick={() => handleCuisineClick(recipe)}>
               Passer en Cuisine

@@ -1,15 +1,18 @@
 'use client';
-
 import { signIn, signOut } from 'next-auth/react';
+
+import { FiLogIn, FiLogOut } from 'react-icons/fi';
+import Button from './Button';
 
 export const LoginButton = () => {
   return (
-    <button
-      onClick={() => signIn()}
-      className="bg-red-400 rounded-sm p-2 text-white font-semibold"
+    <Button
+      className=" rounded-sm p-2 flex items-center gap-2"
+      onClick={() => signIn('github', { callbackUrl: '/recettes' })}
     >
+      <FiLogIn />
       Se connecter
-    </button>
+    </Button>
   );
 };
 
@@ -17,8 +20,9 @@ export const LogoutButton = () => {
   return (
     <button
       onClick={() => signOut()}
-      className="bg-red-400 rounded-sm p-2 text-white font-semibold"
+      className=" rounded-sm p-2 flex items-center gap-2"
     >
+      <FiLogOut />
       Se déconnecter
     </button>
   );
