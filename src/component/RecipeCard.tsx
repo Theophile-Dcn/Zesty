@@ -1,3 +1,4 @@
+// src/component/RecipeCard.tsx
 import Image from 'next/image';
 import Button from './Button';
 
@@ -6,14 +7,14 @@ interface Recipe {
   title: string;
   image: string;
   healthScore: number;
-  servings: string;
+  servings: number;
   readyInMinutes: number;
   pricePerServing: number;
 }
 
 interface RecipeCardProps {
   recipe: Recipe;
-  onUpdate: () => void;
+  onUpdate: () => void; // Fonction à appeler pour mettre à jour la recette
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onUpdate }) => {
