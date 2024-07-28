@@ -1,4 +1,3 @@
-// src/component/RecipeCard.tsx
 import Image from 'next/image';
 import Button from './Button';
 

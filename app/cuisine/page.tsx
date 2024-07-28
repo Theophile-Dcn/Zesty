@@ -21,7 +21,7 @@ const CuisinePage = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch('/api/userRecipes');
+        const response = await fetch('/api/recipes/userRecipes');
         const data = await response.json();
         setRecipes(data);
       } catch (error) {

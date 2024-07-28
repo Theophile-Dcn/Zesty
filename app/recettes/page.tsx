@@ -1,8 +1,5 @@
-// /app/recette/page.tsx
-
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import RecipeCard from '../../src/component/RecipeCard';
 
@@ -19,9 +16,8 @@ interface Recipe {
 const RecettePage = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [count, setCount] = useState<number>(5); // Compteur initialisé à 5
-  const router = useRouter();
 
-  // Fonction pour récupérer les recettes
+  // Fonction pour générer les recettes
   const fetchRecipes = async () => {
     try {
       const response = await fetch(`/api/recipes?number=${count}`);
@@ -37,14 +33,28 @@ const RecettePage = () => {
     }
   };
 
+  // Fonction pour mettre à jour une recette avec son index
+  const updateRecipe = async (index: number) => {
+    try {
+      const response = await fetch(`/api/recipes?number=1`); // Récupérer une seule recette
+      const data = await response.json();
+      const newRecipe = data[0]; // Supposons que l'API retourne une liste avec une recette
+      console.log('Updated Recipe:', newRecipe);
+
+      setRecipes((prevRecipes) => {
+        const updatedRecipes = [...prevRecipes];
+        updatedRecipes[index] = newRecipe; // Remplacer la recette à l'index spécifié
+        return updatedRecipes;
+      });
+    } catch (error) {
+      console.error('Error updating recipe:', error);
+    }
+  };
+
   // Fonction pour gérer le clic du bouton de soumission
   const handleFetchRecipes = () => {
     fetchRecipes();
   };
-
-  function updateRecipe(id: number): void {
-    throw new Error('Function not implemented.');
-  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen mt-32">
@@ -74,12 +84,12 @@ const RecettePage = () => {
       </button>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {recipes.map((recipe) =>
+        {recipes.map((recipe, index) =>
           recipe && recipe.id ? (
             <RecipeCard
               key={recipe.id}
               recipe={recipe}
-              onUpdate={() => updateRecipe(recipe.id)}
+              onUpdate={() => updateRecipe(index)} // Passer l'index de la recette
             />
           ) : (
             <div
