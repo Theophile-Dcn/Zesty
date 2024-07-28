@@ -1,5 +1,8 @@
 // /app/api/recipes/route.ts
+import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
+
+const prisma = new PrismaClient();
 
 const SPOONACULAR_API_URL = process.env.NEXT_PUBLIC_SPOONACULAR_API_URL;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
@@ -31,6 +34,16 @@ export async function GET(request: Request) {
         readyInMinutes: data.readyInMinutes,
         pricePerServing: data.pricePerServing
       };
+
+      await prisma.recipe.create({
+        data: {
+          id: recipe.id.toString(),
+          title: recipe.title,
+          image: recipe.image,
+          instructions: ''
+        }
+      });
+
       return NextResponse.json(recipe);
     }
 
@@ -43,6 +56,17 @@ export async function GET(request: Request) {
       readyInMinutes: recipe.readyInMinutes,
       pricePerServing: recipe.pricePerServing
     }));
+
+    for (const recipe of recipes) {
+      await prisma.recipe.create({
+        data: {
+          id: recipe.id.toString(),
+          title: recipe.title,
+          image: recipe.image,
+          instructions: ''
+        }
+      });
+    }
 
     return NextResponse.json(recipes);
   } catch (error) {

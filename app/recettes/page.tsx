@@ -1,5 +1,8 @@
+// /app/recette/page.tsx
+
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import RecipeCard from '../../src/component/RecipeCard';
 
@@ -16,13 +19,14 @@ interface Recipe {
 const RecettePage = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [count, setCount] = useState<number>(5); // Compteur initialisé à 5
+  const router = useRouter();
 
   // Fonction pour récupérer les recettes
   const fetchRecipes = async () => {
     try {
       const response = await fetch(`/api/recipes?number=${count}`);
       const data = await response.json();
-      console.log('Fetched Recipes:', data); // Ajouter cette ligne pour inspecter les données
+      console.log('Fetched Recipes:', data);
       if (Array.isArray(data)) {
         setRecipes(data);
       } else {
@@ -33,30 +37,14 @@ const RecettePage = () => {
     }
   };
 
-  // Fonction pour remplacer une recette spécifique
-  const updateRecipe = async (index: number) => {
-    try {
-      const response = await fetch(`/api/recipes?number=1`);
-      const data = await response.json();
-      console.log('Fetched new Recipe:', data); // Ajouter cette ligne pour inspecter les données
-      if (Array.isArray(data) && data.length > 0) {
-        setRecipes((prevRecipes) => {
-          const newRecipes = [...prevRecipes];
-          newRecipes[index] = data[0];
-          return newRecipes;
-        });
-      } else {
-        console.error('Unexpected data format:', data);
-      }
-    } catch (error) {
-      console.error('Error fetching new recipe:', error);
-    }
-  };
-
   // Fonction pour gérer le clic du bouton de soumission
   const handleFetchRecipes = () => {
     fetchRecipes();
   };
+
+  function updateRecipe(id: number): void {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen mt-32">
@@ -86,12 +74,12 @@ const RecettePage = () => {
       </button>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {recipes.map((recipe, index) =>
+        {recipes.map((recipe) =>
           recipe && recipe.id ? (
             <RecipeCard
               key={recipe.id}
               recipe={recipe}
-              onUpdate={() => updateRecipe(index)}
+              onUpdate={() => updateRecipe(recipe.id)}
             />
           ) : (
             <div
@@ -103,6 +91,10 @@ const RecettePage = () => {
           )
         )}
       </div>
+
+      <button className="mt-4 p-2 border bg-blue-400 text-white rounded-md">
+        Aller à Cuisine
+      </button>
     </div>
   );
 };

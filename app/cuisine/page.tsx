@@ -1,40 +1,64 @@
 // /app/cuisine/page.tsx
+
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import RecipeCard from '../../src/component/RecipeCard';
 
 interface Recipe {
   id: number;
-  name: string;
-  ingredients: string;
+  title: string;
+  image: string;
+  healthScore: number;
+  servings: number;
+  readyInMinutes: number;
+  pricePerServing: number;
 }
 
 const CuisinePage = () => {
-  const searchParams = useSearchParams();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    const recipeParam = searchParams.get('recipe');
-    if (recipeParam) {
+    const fetchRecipes = async () => {
       try {
-        const parsedRecipe = JSON.parse(decodeURIComponent(recipeParam));
-        setRecipe(parsedRecipe);
+        const response = await fetch('/api/userRecipes');
+        const data = await response.json();
+        setRecipes(data);
       } catch (error) {
-        console.error('Error parsing recipe:', error);
+        console.error('Error fetching recipes:', error);
       }
-    }
-  }, [searchParams]);
+    };
 
-  if (!recipe) {
+    fetchRecipes();
+  }, []);
+
+  if (recipes.length === 0) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      <h1>Cuisine</h1>
-      <h2>{recipe.name}</h2>
-      <p>{recipe.ingredients}</p>
+    <div className="flex flex-col items-center justify-center h-screen mt-32">
+      <h1 className="p-8">Cuisine</h1>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {recipes.map((recipe) =>
+          recipe && recipe.id ? (
+            <RecipeCard
+              key={recipe.id}
+              recipe={recipe}
+              onUpdate={() => {
+                // Handle recipe update if needed
+              }}
+            />
+          ) : (
+            <div
+              key={Math.random()}
+              className="p-4 border-2 border-red-400 rounded-md"
+            >
+              <p>Recipe data is invalid</p>
+            </div>
+          )
+        )}
+      </div>
     </div>
   );
 };
