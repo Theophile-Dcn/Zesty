@@ -49,21 +49,6 @@ export async function GET(request: Request) {
         pricePerServing: recipe.pricePerServing
       }));
 
-      for (const recipe of recipes) {
-        await prisma.recipe.create({
-          data: {
-            id: recipe.id.toString(),
-            title: recipe.title,
-            image: recipe.image,
-            instructions: recipe.instructions || '',
-            healthScore: recipe.healthScore || 0,
-            servings: recipe.servings || 0,
-            readyInMinutes: recipe.readyInMinutes || 0,
-            pricePerServing: recipe.pricePerServing || 0
-          }
-        });
-      }
-
       return NextResponse.json(recipes);
     }
   } catch (error) {

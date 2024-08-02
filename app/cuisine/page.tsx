@@ -19,7 +19,7 @@ const CuisinePage = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchUserRecipes = async () => {
       try {
         const response = await fetch('/api/recipes/userRecipes');
         const data = await response.json();
@@ -29,7 +29,7 @@ const CuisinePage = () => {
       }
     };
 
-    fetchRecipes();
+    fetchUserRecipes();
   }, []);
 
   if (recipes.length === 0) {
