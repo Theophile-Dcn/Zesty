@@ -14,9 +14,14 @@ interface Recipe {
 interface RecipeCardProps {
   recipe: Recipe;
   onUpdate: () => void; // Fonction à appeler pour mettre à jour la recette
+  onDelete: () => void; // Fonction à appeler pour supprimer la recette
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onUpdate }) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({
+  recipe,
+  onUpdate,
+  onDelete
+}) => {
   return (
     <div className="p-4 border-2 border-green-400 rounded-md w-full flex flex-col items-center justify-center gap-4">
       <h2 className="text-sm font-bold">{recipe.title}</h2>
@@ -30,6 +35,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, onUpdate }) => {
       <Button onClick={onUpdate} className="border-green-400">
         Remplacer
       </Button>
+      <button onClick={onDelete} className="border-red-400">
+        Supprimer
+      </button>
       <div className="flex flex-col gap-2">
         <div className="flex flex-row gap-2">
           <p className="text-sm">Health Score : {recipe.healthScore}</p>

@@ -41,3 +41,23 @@ export async function GET() {
     return NextResponse.error();
   }
 }
+export async function DELETE(request: Request) {
+  try {
+    const { id } = await request.json();
+    console.log('Received recipe ID:', id);
+
+    await prisma.recipe.delete({
+      where: {
+        id: id.toString()
+      }
+    });
+
+    return NextResponse.json({ success: true, message: 'Recipe deleted' });
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    return NextResponse.json(
+      { success: false, message: 'Error deleting recipe' },
+      { status: 500 }
+    );
+  }
+}
