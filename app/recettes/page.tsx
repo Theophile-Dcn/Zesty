@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import RecipeCard from '../../src/component/RecipeCard';
+import RecipeCard from '../../src/components/RecipeCard';
 import {
   deleteRecipe,
   postRecipes,

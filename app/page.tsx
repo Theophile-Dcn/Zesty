@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import RecipeCard from '../src/component/RecipeCard';
-import { deleteRecipe, Recipe, updateRecipe } from '../src/utils/recipeUtils';
+import RecipeCarousel from '../src/components/RecipeCarousel';
+import { Recipe } from '../src/utils/recipeUtils';
 
 export default function Home() {
   const [hasRecipes, setHasRecipes] = useState<boolean>(false);
@@ -37,15 +37,12 @@ export default function Home() {
           Zesty, l&apos;application pour créer et gérer vos recettes et vos
           listes de courses
         </h1>
+        <h2 className="font-bold">Vos recettes</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {recipes.map((recipe, index) =>
+          {recipes.map((recipe) =>
             recipe && recipe.id ? (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                onUpdate={() => updateRecipe(recipes, setRecipes, index)}
-                onDelete={() => deleteRecipe(recipes, setRecipes, index)}
-              />
+              // eslint-disable-next-line react/jsx-key
+              <RecipeCarousel recipes={recipes} />
             ) : (
               <div
                 key={Math.random()}
