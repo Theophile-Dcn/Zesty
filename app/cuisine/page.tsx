@@ -17,7 +17,6 @@ const CuisinePage = () => {
         const response = await fetch('/api/recipes/userRecipes');
         const data = await response.json();
 
-        // Vérifiez que la réponse est un tableau avant de mettre à jour l'état
         if (Array.isArray(data)) {
           setRecipes(data);
         } else {
